@@ -12,7 +12,10 @@ const geocode = (address, callback) => {
             callback(undefined, {
                 latitude: body.location.lat,
                 longitude: body.location.lon,
-                location: body.location.name
+                location: body.location.name,
+                temperature: body.current.temperature,
+                feelLike: body.current.feelslike,
+                
             })
         }
     })

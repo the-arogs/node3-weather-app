@@ -2,7 +2,6 @@ const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
 const geocode = require('./utils/geocode')
-const forecast = require('./utils/forecast')
 
 
 const app = express()
@@ -26,14 +25,14 @@ app.use(express.static(publicDirectoryPath))
 app.get('', (req, res) => {
     res.render('index', {
         title: 'Weather',
-        name: 'Andrew Mead'
+        name: 'Akintoye Arogunmati'
     })
 })
 
 app.get('/about', (req, res) => {
     res.render('about', {
         title: 'About Me',
-        name: 'Andrew Mead'
+        name: 'Akintoye Arogunmati'
     })
 })
 
@@ -41,7 +40,7 @@ app.get('/help', (req, res) => {
     res.render('help', {
         helpText: 'This is some helpful text.',
         title: 'Help',
-        name: 'Andrew Mead'
+        name: 'Akintoye Arogunmati'
     })
 })
 
@@ -51,24 +50,31 @@ app.get('/weather', (req, res) => {
             error : "provide an address"
         })
     }
-    geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
+    geocode(req.query.address, (error, { latitude, longitude, location, temperature, feelLike } = {}) => {
         if (error) {
             return res.send({
                 error : 'Unknown location'
             })
         }
-        console.log(latitude, longitude)
-        forecast(latitude, longitude, (error, forecastData) => {
-            if (error) {
-                return res.send({
-                    error : 'could not find forcast data'
-                })
-            }
+        // forecast(latitude, longitude, (error, forecastData) => {
+        //     if (error) {
+        //         return res.send({
+        //             error : 'could not find forcast data'
+        //         })
+        //     }
 
-            res.send({
-                forecast: forecastData,
-                location,
-            })
+        //     res.send({
+        //         forecast: forecastData,
+        //         location,
+        //     })
+        // })
+        res.send({
+            latitude,    
+            longitude,    
+            temperature,
+            location,
+            feelLike,
+            forecast: "It is currently " + temperature + 'degrees, but it feels like ' + feelLike
         })
     })
     
@@ -88,7 +94,7 @@ app.get('/products', (req, res) => {
 app.get('/help/*', (req, res) => {
     res.render('404', {
         title: '404',
-        name: 'Andrew Mead',
+        name: 'Akintoye Arogunmati',
         errorMessage: 'Help article not found.'
     })
 })
@@ -96,7 +102,7 @@ app.get('/help/*', (req, res) => {
 app.get('*', (req, res) => {
     res.render('404', {
         title: '404',
-        name: 'Andrew Mead',
+        name: 'Akintoye Arogunmati',
         errorMessage: 'Page not found.'
     })
 })
